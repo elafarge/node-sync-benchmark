@@ -98,13 +98,25 @@ app.get('/findPrimesAsyncAwait/:iterations', async (req, res) => {
   })
 })
 
-// Ok, that's maybe the last one, trying with awaity
+// Ok, that's one more, trying with awaity
 app.get('/findPrimesAwaity/:iterations', async (req, res) => {
   // NOTE: on real production systems, one may prefer process.hrtime...
   const t0 = new Date().getTime()
   const primes = await f.findPrimesAwaity(req.params.iterations)
+  const delta = new Date().getTime() - t0
   res.json({
-    message: `found ${primes.length} prime numbers in ${new Date().getTime() - t0} milliseconds`,
+    message: `found ${primes.length} prime numbers in ${delta} milliseconds`,
+  })
+})
+
+// With a b it of abstraction
+app.get('/findPrimesCustom/:iterations', async (req, res) => {
+  // NOTE: on real production systems, one may prefer process.hrtime...
+  const t0 = new Date().getTime()
+  const primes = await f.findPrimesCustom(req.params.iterations)
+  const delta = new Date().getTime() - t0
+  res.json({
+    message: `found ${primes.length} prime numbers in ${delta} milliseconds`,
   })
 })
 

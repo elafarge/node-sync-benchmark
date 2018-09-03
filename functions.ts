@@ -3,6 +3,8 @@ import * as _fp from 'lodash/fp'
 import * as Bluebird from 'bluebird'
 import * as Async from 'awaity'
 
+import * as asyncTools from './asyncTools'
+
 Promise = Promise || (Bluebird as any)
 
 // Asynchronous (non blocking) sleep
@@ -389,23 +391,44 @@ export async function findPrimesAsyncAwait(
   return primes
 }
 
-// Ok, let's try a really last one with async/await and promises
+// Edit: the previous one wsn't the last, let's play with awaity
 export async function findPrimesAwaity(iterations: number): Promise<number[]> {
+  const ns = _.range(2, iterations)
+
   return Async.filterLimit(
-    _.range(2, iterations),
-    async candidate => {
+    ns,
+    async n => {
       return new Promise(resolve => {
         let isPrime = true
-        for (let c = 2; c <= Math.sqrt(candidate); ++c) {
-          console.log(candidate)
-          if (candidate % c === 0) {
+        for (let c = 2; c <= Math.sqrt(n); ++c) {
+          if (n % c === 0) {
             isPrime = false
             break
           }
         }
-        return resolve(isPrime)
+        return setImmediate(() => resolve(isPrime))
       })
     },
     10
+  )
+}
+
+// Trying custom nb tools
+export async function findPrimesCustom(iterations: number): Promise<number[]> {
+  const ns = _.range(2, iterations)
+
+  return asyncTools.filter(
+    ns,
+    n => {
+      let isPrime = true
+      for (let c = 2; c <= Math.sqrt(n); ++c) {
+        if (n % c === 0) {
+          isPrime = false
+          break
+        }
+      }
+      return isPrime
+    },
+    1
   )
 }
