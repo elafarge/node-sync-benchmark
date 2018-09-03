@@ -393,7 +393,7 @@ export async function findPrimesAsyncAwait(
 
 // Edit: the previous one wsn't the last, let's play with awaity
 export async function findPrimesAwaity(iterations: number): Promise<number[]> {
-  const ns = _.range(2, iterations)
+  const ns = _.range(2, iterations) // this blocks the event loop
 
   return Async.filterLimit(
     ns,
@@ -415,7 +415,7 @@ export async function findPrimesAwaity(iterations: number): Promise<number[]> {
 
 // Trying custom nb tools
 export async function findPrimesCustom(iterations: number): Promise<number[]> {
-  const ns = _.range(2, iterations)
+  const ns = await asyncTools.range(2, iterations)
 
   return asyncTools.filter(
     ns,
