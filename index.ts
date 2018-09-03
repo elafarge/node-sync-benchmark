@@ -98,6 +98,16 @@ app.get('/findPrimesAsyncAwait/:iterations', async (req, res) => {
   })
 })
 
+// Ok, that's maybe the last one, trying with awaity
+app.get('/findPrimesAwaity/:iterations', async (req, res) => {
+  // NOTE: on real production systems, one may prefer process.hrtime...
+  const t0 = new Date().getTime()
+  const primes = await f.findPrimesAwaity(req.params.iterations)
+  res.json({
+    message: `found ${primes.length} prime numbers in ${new Date().getTime() - t0} milliseconds`,
+  })
+})
+
 // This little piece of code detects when the event loop is blocked (by creating
 // a timer that SHOULD be executed every 1ms and measuring the lag between the
 // expected execution time and the actual execution time

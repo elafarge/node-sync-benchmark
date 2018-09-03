@@ -1,6 +1,7 @@
 import * as _ from 'lodash'
 import * as _fp from 'lodash/fp'
 import * as Bluebird from 'bluebird'
+import * as Async from 'awaity'
 
 Promise = Promise || (Bluebird as any)
 
@@ -230,7 +231,7 @@ export async function findPrimesAsyncHack(
 
       // HERE'S THE HACK, let's find our next prime number ON THE NEXT EVENT
       // LOOP TICK. This operation yields (=releases) the event loop for one run
-      setTimeout(findNextPrime.bind(null, i + 1), 0)
+      setImmediate(() => findNextPrime(i + 1))
     }
 
     // Let's start our recursive function
@@ -386,4 +387,25 @@ export async function findPrimesAsyncAwait(
 
   // Weirdly enough, it doesn't work when using Bluebird's promise type
   return primes
+}
+
+// Ok, let's try a really last one with async/await and promises
+export async function findPrimesAwaity(iterations: number): Promise<number[]> {
+  return Async.filterLimit(
+    _.range(2, iterations),
+    async candidate => {
+      return new Promise(resolve => {
+        let isPrime = true
+        for (let c = 2; c <= Math.sqrt(candidate); ++c) {
+          console.log(candidate)
+          if (candidate % c === 0) {
+            isPrime = false
+            break
+          }
+        }
+        return resolve(isPrime)
+      })
+    },
+    10
+  )
 }
