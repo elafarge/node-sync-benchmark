@@ -29,13 +29,14 @@ const functions = [
   'findPrimesLodashFPReduce',
 ]
 
-functions.forEach((func) => {
+functions.forEach(func => {
   app.get(`/${func}/:iterations`, (req, res) => {
     // NOTE: on real production systems, one may prefer process.hrtime...
     const t0 = new Date().getTime()
     const primes = f[func](req.params.iterations)
+    const delta = new Date().getTime() - t0
     res.json({
-      message: `found ${primes.length} prime numbers in ${new Date().getTime() - t0} milliseconds`,
+      message: `found ${primes.length} prime numbers in ${delta} milliseconds`,
     })
   })
 })
@@ -46,8 +47,9 @@ app.get('/findPrimesAsyncHack/:iterations', async (req, res) => {
   // NOTE: on real production systems, one may prefer process.hrtime...
   const t0 = new Date().getTime()
   const primes = await f.findPrimesAsyncHack(req.params.iterations)
+  const delta = new Date().getTime() - t0
   res.json({
-    message: `found ${primes.length} prime numbers in ${new Date().getTime() - t0} milliseconds`,
+    message: `found ${primes.length} prime numbers in ${delta} milliseconds`,
   })
 })
 
@@ -56,8 +58,9 @@ app.get('/findPrimesBluebirdEach/:iterations', async (req, res) => {
   // NOTE: on real production systems, one may prefer process.hrtime...
   const t0 = new Date().getTime()
   const primes = await f.findPrimesBluebirdEach(req.params.iterations)
+  const delta = new Date().getTime() - t0
   res.json({
-    message: `found ${primes.length} prime numbers in ${new Date().getTime() - t0} milliseconds`,
+    message: `found ${primes.length} prime numbers in ${delta} milliseconds`,
   })
 })
 
@@ -66,8 +69,9 @@ app.get('/findPrimesBluebirdReduce/:iterations', async (req, res) => {
   // NOTE: on real production systems, one may prefer process.hrtime...
   const t0 = new Date().getTime()
   const primes = await f.findPrimesBluebirdReduce(req.params.iterations)
+  const delta = new Date().getTime() - t0
   res.json({
-    message: `found ${primes.length} prime numbers in ${new Date().getTime() - t0} milliseconds`,
+    message: `found ${primes.length} prime numbers in ${delta} milliseconds`,
   })
 })
 
@@ -77,8 +81,9 @@ app.get('/findPrimesPromiseAll/:iterations', async (req, res) => {
   // NOTE: on real production systems, one may prefer process.hrtime...
   const t0 = new Date().getTime()
   const primes = await f.findPrimesPromiseAll(req.params.iterations)
+  const delta = new Date().getTime() - t0
   res.json({
-    message: `found ${primes.length} prime numbers in ${new Date().getTime() - t0} milliseconds`,
+    message: `found ${primes.length} prime numbers in ${delta} milliseconds`,
   })
 })
 
@@ -87,8 +92,9 @@ app.get('/findPrimesAsyncAwait/:iterations', async (req, res) => {
   // NOTE: on real production systems, one may prefer process.hrtime...
   const t0 = new Date().getTime()
   const primes = await f.findPrimesAsyncAwait(req.params.iterations)
+  const delta = new Date().getTime() - t0
   res.json({
-    message: `found ${primes.length} prime numbers in ${new Date().getTime() - t0} milliseconds`,
+    message: `found ${primes.length} prime numbers in ${delta} milliseconds`,
   })
 })
 
