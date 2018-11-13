@@ -21,7 +21,7 @@ app.get('/healthz', (req: express.Request, res: express.Response) => {
 
 // For each of our synchronous functions, let's create a route
 const functions = [
-  'findPrimes',
+  'findPrimesVM',
   'findPrimesForEach',
   'findPrimesReduce',
   'findPrimesLodashForEach',

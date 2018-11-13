@@ -1,3 +1,5 @@
+import * as vm from 'vm'
+
 import * as _ from 'lodash'
 import * as _fp from 'lodash/fp'
 import * as Bluebird from 'bluebird'
@@ -29,6 +31,35 @@ export function findPrimes(iterations: number): number[] {
     }
   }
   return primes
+}
+
+// Synchronous prime number lookup using a for loop in a separate isolate (is it
+// blocking or... ?)
+export function findPrimesVM(iterations: number): number[] {
+  const sandbox = { primes: [], iterations }
+
+  vm.createContext(sandbox)
+
+  vm.runInContext(`
+
+  for (let i = 0; i < iterations; i++) {
+    let candidate = i * (4000000000 * Math.random());
+    let isPrime = true;
+    for (let c = 2; c <= Math.sqrt(candidate); ++c) {
+      if (candidate % c === 0) {
+          // not prime
+          isPrime = false;
+          break;
+       }
+    }
+    if (isPrime) {
+      primes.push(candidate);
+    }
+  }
+
+`, sandbox)
+
+  return sandbox.primes
 }
 
 // Variant using Array.forEach
